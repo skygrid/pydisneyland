@@ -1,7 +1,7 @@
 import time
 
 import disneylandClient.disneyland_pb2
-from disneylandClient.disneyland_pb2 import ListJobsRequest, Job, RequestWithId
+from disneylandClient.disneyland_pb2 import ListJobsRequest, Job, RequestWithId, ListOfJobs
 
 print("\tUser able to:")
 
@@ -45,3 +45,9 @@ print("success\n{0}".format(created_job))
 print("\tDelete Job")
 deleted_job = user_client.DeleteJob(RequestWithId(id=blank_job.id))
 print("success\n{0}".format(deleted_job))
+
+print("\tCreate Multiple blank Jobs")
+lst = [Job(metadata="mul1-python"), Job(metadata="mul2-python")]
+result = user_client.CreateMultipeJobs(ListOfJobs(jobs=lst))
+if len(result.jobs) == len(lst):
+    print("success\n{0}".format(result))
