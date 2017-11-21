@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='disneyland.proto',
   package='',
   syntax='proto3',
-  serialized_pb=_b('\n\x10\x64isneyland.proto\"\xc9\x01\n\x03Job\x12\x0f\n\x07project\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\x04\x12\x0c\n\x04kind\x18\x03 \x01(\t\x12\x1b\n\x06status\x18\x04 \x01(\x0e\x32\x0b.Job.Status\x12\r\n\x05input\x18\x05 \x01(\t\x12\x0e\n\x06output\x18\x06 \x01(\t\x12\x10\n\x08metadata\x18\x07 \x01(\t\"I\n\x06Status\x12\x0b\n\x07PENDING\x10\x00\x12\n\n\x06PULLED\x10\x01\x12\x0b\n\x07RUNNING\x10\x02\x12\n\n\x06\x46\x41ILED\x10\x03\x12\r\n\tCOMPLETED\x10\x04\" \n\nListOfJobs\x12\x12\n\x04jobs\x18\x01 \x03(\x0b\x32\x04.Job\"\x1b\n\rRequestWithId\x12\n\n\x02id\x18\x01 \x01(\x04\"B\n\x0fListJobsRequest\x12\x10\n\x08how_many\x18\x01 \x01(\r\x12\x0f\n\x07project\x18\x02 \x01(\t\x12\x0c\n\x04kind\x18\x03 \x01(\t2\x9b\x02\n\nDisneyland\x12\x19\n\tCreateJob\x12\x04.Job\x1a\x04.Job\"\x00\x12 \n\x06GetJob\x12\x0e.RequestWithId\x1a\x04.Job\"\x00\x12+\n\x08ListJobs\x12\x10.ListJobsRequest\x1a\x0b.ListOfJobs\"\x00\x12/\n\x11\x43reateMultipeJobs\x12\x0b.ListOfJobs\x1a\x0b.ListOfJobs\"\x00\x12\x19\n\tModifyJob\x12\x04.Job\x1a\x04.Job\"\x00\x12\x32\n\x0fPullPendingJobs\x12\x10.ListJobsRequest\x1a\x0b.ListOfJobs\"\x00\x12#\n\tDeleteJob\x12\x0e.RequestWithId\x1a\x04.Job\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x10\x64isneyland.proto\"\xc9\x01\n\x03Job\x12\x0f\n\x07project\x18\x01 \x01(\t\x12\n\n\x02id\x18\x02 \x01(\x04\x12\x0c\n\x04kind\x18\x03 \x01(\t\x12\x1b\n\x06status\x18\x04 \x01(\x0e\x32\x0b.Job.Status\x12\r\n\x05input\x18\x05 \x01(\t\x12\x0e\n\x06output\x18\x06 \x01(\t\x12\x10\n\x08metadata\x18\x07 \x01(\t\"I\n\x06Status\x12\x0b\n\x07PENDING\x10\x00\x12\n\n\x06PULLED\x10\x01\x12\x0b\n\x07RUNNING\x10\x02\x12\n\n\x06\x46\x41ILED\x10\x03\x12\r\n\tCOMPLETED\x10\x04\" \n\nListOfJobs\x12\x12\n\x04jobs\x18\x01 \x03(\x0b\x32\x04.Job\"\x1b\n\rRequestWithId\x12\n\n\x02id\x18\x01 \x01(\x04\"B\n\x0fListJobsRequest\x12\x10\n\x08how_many\x18\x01 \x01(\r\x12\x0f\n\x07project\x18\x02 \x01(\t\x12\x0c\n\x04kind\x18\x03 \x01(\t2\xc5\x02\n\nDisneyland\x12\x19\n\tCreateJob\x12\x04.Job\x1a\x04.Job\"\x00\x12 \n\x06GetJob\x12\x0e.RequestWithId\x1a\x04.Job\"\x00\x12+\n\x08ListJobs\x12\x10.ListJobsRequest\x1a\x0b.ListOfJobs\"\x00\x12/\n\x11\x43reateMultipeJobs\x12\x0b.ListOfJobs\x1a\x0b.ListOfJobs\"\x00\x12\x19\n\tModifyJob\x12\x04.Job\x1a\x04.Job\"\x00\x12\x32\n\x0fPullPendingJobs\x12\x10.ListJobsRequest\x1a\x0b.ListOfJobs\"\x00\x12#\n\tDeleteJob\x12\x0e.RequestWithId\x1a\x04.Job\"\x00\x12(\n\x08\x42idiJobs\x12\x10.ListJobsRequest\x1a\x04.Job\"\x00(\x01\x30\x01\x62\x06proto3')
 )
 
 
@@ -332,6 +332,11 @@ try:
           request_serializer=RequestWithId.SerializeToString,
           response_deserializer=Job.FromString,
           )
+      self.BidiJobs = channel.stream_stream(
+          '/Disneyland/BidiJobs',
+          request_serializer=ListJobsRequest.SerializeToString,
+          response_deserializer=Job.FromString,
+          )
 
 
   class DisneylandServicer(object):
@@ -387,6 +392,13 @@ try:
       context.set_details('Method not implemented!')
       raise NotImplementedError('Method not implemented!')
 
+    def BidiJobs(self, request_iterator, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+      context.set_details('Method not implemented!')
+      raise NotImplementedError('Method not implemented!')
+
 
   def add_DisneylandServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -423,6 +435,11 @@ try:
         'DeleteJob': grpc.unary_unary_rpc_method_handler(
             servicer.DeleteJob,
             request_deserializer=RequestWithId.FromString,
+            response_serializer=Job.SerializeToString,
+        ),
+        'BidiJobs': grpc.stream_stream_rpc_method_handler(
+            servicer.BidiJobs,
+            request_deserializer=ListJobsRequest.FromString,
             response_serializer=Job.SerializeToString,
         ),
     }
@@ -464,6 +481,10 @@ try:
       pass
       context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
     def DeleteJob(self, request, context):
+      # missing associated documentation comment in .proto file
+      pass
+      context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
+    def BidiJobs(self, request_iterator, context):
       # missing associated documentation comment in .proto file
       pass
       context.code(beta_interfaces.StatusCode.UNIMPLEMENTED)
@@ -512,6 +533,10 @@ try:
       pass
       raise NotImplementedError()
     DeleteJob.future = None
+    def BidiJobs(self, request_iterator, timeout, metadata=None, with_call=False, protocol_options=None):
+      # missing associated documentation comment in .proto file
+      pass
+      raise NotImplementedError()
 
 
   def beta_create_Disneyland_server(servicer, pool=None, pool_size=None, default_timeout=None, maximum_timeout=None):
@@ -521,6 +546,7 @@ try:
     file not marked beta) for all further purposes. This function was
     generated only to ease transition from grpcio<0.15.0 to grpcio>=0.15.0"""
     request_deserializers = {
+      ('Disneyland', 'BidiJobs'): ListJobsRequest.FromString,
       ('Disneyland', 'CreateJob'): Job.FromString,
       ('Disneyland', 'CreateMultipeJobs'): ListOfJobs.FromString,
       ('Disneyland', 'DeleteJob'): RequestWithId.FromString,
@@ -530,6 +556,7 @@ try:
       ('Disneyland', 'PullPendingJobs'): ListJobsRequest.FromString,
     }
     response_serializers = {
+      ('Disneyland', 'BidiJobs'): Job.SerializeToString,
       ('Disneyland', 'CreateJob'): Job.SerializeToString,
       ('Disneyland', 'CreateMultipeJobs'): ListOfJobs.SerializeToString,
       ('Disneyland', 'DeleteJob'): Job.SerializeToString,
@@ -539,6 +566,7 @@ try:
       ('Disneyland', 'PullPendingJobs'): ListOfJobs.SerializeToString,
     }
     method_implementations = {
+      ('Disneyland', 'BidiJobs'): face_utilities.stream_stream_inline(servicer.BidiJobs),
       ('Disneyland', 'CreateJob'): face_utilities.unary_unary_inline(servicer.CreateJob),
       ('Disneyland', 'CreateMultipeJobs'): face_utilities.unary_unary_inline(servicer.CreateMultipeJobs),
       ('Disneyland', 'DeleteJob'): face_utilities.unary_unary_inline(servicer.DeleteJob),
@@ -558,6 +586,7 @@ try:
     file not marked beta) for all further purposes. This function was
     generated only to ease transition from grpcio<0.15.0 to grpcio>=0.15.0"""
     request_serializers = {
+      ('Disneyland', 'BidiJobs'): ListJobsRequest.SerializeToString,
       ('Disneyland', 'CreateJob'): Job.SerializeToString,
       ('Disneyland', 'CreateMultipeJobs'): ListOfJobs.SerializeToString,
       ('Disneyland', 'DeleteJob'): RequestWithId.SerializeToString,
@@ -567,6 +596,7 @@ try:
       ('Disneyland', 'PullPendingJobs'): ListJobsRequest.SerializeToString,
     }
     response_deserializers = {
+      ('Disneyland', 'BidiJobs'): Job.FromString,
       ('Disneyland', 'CreateJob'): Job.FromString,
       ('Disneyland', 'CreateMultipeJobs'): ListOfJobs.FromString,
       ('Disneyland', 'DeleteJob'): Job.FromString,
@@ -576,6 +606,7 @@ try:
       ('Disneyland', 'PullPendingJobs'): ListOfJobs.FromString,
     }
     cardinalities = {
+      'BidiJobs': cardinality.Cardinality.STREAM_STREAM,
       'CreateJob': cardinality.Cardinality.UNARY_UNARY,
       'CreateMultipeJobs': cardinality.Cardinality.UNARY_UNARY,
       'DeleteJob': cardinality.Cardinality.UNARY_UNARY,

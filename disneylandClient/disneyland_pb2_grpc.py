@@ -49,6 +49,11 @@ class DisneylandStub(object):
         request_serializer=disneyland__pb2.RequestWithId.SerializeToString,
         response_deserializer=disneyland__pb2.Job.FromString,
         )
+    self.BidiJobs = channel.stream_stream(
+        '/Disneyland/BidiJobs',
+        request_serializer=disneyland__pb2.ListJobsRequest.SerializeToString,
+        response_deserializer=disneyland__pb2.Job.FromString,
+        )
 
 
 class DisneylandServicer(object):
@@ -104,6 +109,13 @@ class DisneylandServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def BidiJobs(self, request_iterator, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_DisneylandServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -140,6 +152,11 @@ def add_DisneylandServicer_to_server(servicer, server):
       'DeleteJob': grpc.unary_unary_rpc_method_handler(
           servicer.DeleteJob,
           request_deserializer=disneyland__pb2.RequestWithId.FromString,
+          response_serializer=disneyland__pb2.Job.SerializeToString,
+      ),
+      'BidiJobs': grpc.stream_stream_rpc_method_handler(
+          servicer.BidiJobs,
+          request_deserializer=disneyland__pb2.ListJobsRequest.FromString,
           response_serializer=disneyland__pb2.Job.SerializeToString,
       ),
   }
