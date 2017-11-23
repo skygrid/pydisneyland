@@ -29,11 +29,6 @@ class DisneylandStub(object):
         request_serializer=disneyland__pb2.ListJobsRequest.SerializeToString,
         response_deserializer=disneyland__pb2.ListOfJobs.FromString,
         )
-    self.CreateMultipeJobs = channel.unary_unary(
-        '/Disneyland/CreateMultipeJobs',
-        request_serializer=disneyland__pb2.ListOfJobs.SerializeToString,
-        response_deserializer=disneyland__pb2.ListOfJobs.FromString,
-        )
     self.ModifyJob = channel.unary_unary(
         '/Disneyland/ModifyJob',
         request_serializer=disneyland__pb2.Job.SerializeToString,
@@ -47,11 +42,6 @@ class DisneylandStub(object):
     self.DeleteJob = channel.unary_unary(
         '/Disneyland/DeleteJob',
         request_serializer=disneyland__pb2.RequestWithId.SerializeToString,
-        response_deserializer=disneyland__pb2.Job.FromString,
-        )
-    self.BidiJobs = channel.stream_stream(
-        '/Disneyland/BidiJobs',
-        request_serializer=disneyland__pb2.ListJobsRequest.SerializeToString,
         response_deserializer=disneyland__pb2.Job.FromString,
         )
 
@@ -81,13 +71,6 @@ class DisneylandServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def CreateMultipeJobs(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
   def ModifyJob(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -103,13 +86,6 @@ class DisneylandServicer(object):
     raise NotImplementedError('Method not implemented!')
 
   def DeleteJob(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def BidiJobs(self, request_iterator, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -134,11 +110,6 @@ def add_DisneylandServicer_to_server(servicer, server):
           request_deserializer=disneyland__pb2.ListJobsRequest.FromString,
           response_serializer=disneyland__pb2.ListOfJobs.SerializeToString,
       ),
-      'CreateMultipeJobs': grpc.unary_unary_rpc_method_handler(
-          servicer.CreateMultipeJobs,
-          request_deserializer=disneyland__pb2.ListOfJobs.FromString,
-          response_serializer=disneyland__pb2.ListOfJobs.SerializeToString,
-      ),
       'ModifyJob': grpc.unary_unary_rpc_method_handler(
           servicer.ModifyJob,
           request_deserializer=disneyland__pb2.Job.FromString,
@@ -152,11 +123,6 @@ def add_DisneylandServicer_to_server(servicer, server):
       'DeleteJob': grpc.unary_unary_rpc_method_handler(
           servicer.DeleteJob,
           request_deserializer=disneyland__pb2.RequestWithId.FromString,
-          response_serializer=disneyland__pb2.Job.SerializeToString,
-      ),
-      'BidiJobs': grpc.stream_stream_rpc_method_handler(
-          servicer.BidiJobs,
-          request_deserializer=disneyland__pb2.ListJobsRequest.FromString,
           response_serializer=disneyland__pb2.Job.SerializeToString,
       ),
   }
